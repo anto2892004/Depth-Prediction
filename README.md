@@ -1,14 +1,106 @@
-Depth-Estimation
-Depth Estimation using MiDaS and U-Net
 
-Overview
+# Depth Prediction – U-Net + MiDaS Pipeline
 
-This repository presents a monocular depth estimation model that integrates MiDaS and U-Net in a pipeline to generate accurate depth maps. Depth estimation plays a crucial role in various computer vision applications, including autonomous driving, robotics, and augmented reality. By leveraging the strengths of both MiDaS and U-Net, the model achieves high precision in depth predictions while being optimized for real-time deployment.
+A **monocular depth estimation pipeline** built with **MiDaS** and **U-Net** for improved accuracy and sharper outputs on the **KITTI dataset**.  
+This project uses **novel preprocessing techniques** such as **shuffled patch augmentation** to enhance spatial learning and robustness.
 
-Features
+---
 
-Pipeline Integration: The model combines MiDaS for initial depth estimation and U-Net for refinement, enhancing the accuracy and sharpness of depth maps. Dataset Utilization: The model is trained and validated using the KITTI dataset, a widely used benchmark for depth estimation tasks. High Accuracy: The combined MiDaS + U-Net approach achieves an accuracy of 96% on the processed dataset. Edge AI Compatibility: Optimized for deployment on edge devices, ensuring efficient depth estimation within a compact model size of 10MB. Real-time Processing: The pipeline is designed for fast inference, making it suitable for applications requiring real-time depth estimation.
+## ✨ Key Features
+- **Two-stage architecture**:
+  1. **MiDaS** generates coarse depth estimations.
+  2. **U-Net** refines and sharpens the predictions.
+- **Novel preprocessing**: Shuffled patch augmentation improves robustness to spatial variations.
+- Optimized for the **KITTI dataset**.
+- Supports both **image** and **video** depth estimation.
 
-Model Architecture
+---
 
-The depth estimation pipeline consists of the following components: MiDaS Preprocessing: The MiDaS model generates an initial depth estimate from monocular images, providing a coarse depth map. U-Net Refinement: The output from MiDaS is passed through a U-Net model, which refines depth predictions by preserving local features and improving depth accuracy. Training Pipeline: The U-Net model is trained on a custom dataset derived from KITTI, incorporating data augmentation, image normalization, and optimized loss functions for improved performance. Deployment: The final model is optimized for Edge AI devices, ensuring a balance between accuracy and computational efficiency.
+## 🛠 Pipeline Flow
+
+```
+
+RGB Image
+│
+▼
+MiDaS Model  ──►  Initial Depth Map
+│
+▼
+Shuffled Patch Augmentation
+│
+▼
+U-Net Refinement
+│
+▼
+Final Depth Map
+
+````
+
+---
+
+## 📦 Installation
+```bash
+git clone https://github.com/anto2892004/Depth-Prediction.git
+cd Depth-Prediction
+pip install -r requirements.txt
+````
+
+---
+
+## 🚀 Usage
+
+### 1️⃣ Training on KITTI
+
+```bash
+python train.py \
+  --data-path /path/to/KITTI \
+  --epochs 30 \
+  --batch-size 8
+```
+
+### 2️⃣ Evaluation
+
+```bash
+python eval.py \
+  --data-path /path/to/KITTI \
+  --ckpt model.pth
+```
+
+### 3️⃣ Inference
+
+**Image:**
+
+```bash
+python infer_image.py \
+  --input image.jpg \
+  --ckpt model.pth
+```
+
+**Video:**
+
+```bash
+python infer_video.py \
+  --input video.mp4 \
+  --ckpt model.pth
+```
+
+---
+
+## 📂 Project Structure
+
+```
+src/
+  ├── preprocess.py     # Shuffling & augmentation methods
+  ├── midas_model.py    # MiDaS depth estimation
+  ├── unet_model.py     # U-Net refinement
+  ├── train.py          # Training script
+  ├── eval.py           # Evaluation script
+  ├── infer_image.py    # Image inference
+  ├── infer_video.py    # Video inference
+requirements.txt
+```
+
+---
+
+
+
